@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3C018ECF22E70BE2006E22DA /* BilliardsPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C018ECE22E70BE2006E22DA /* BilliardsPath.swift */; };
+		3C6FD95222E8335200DA3CAD /* BilliardsDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6FD95122E8335200DA3CAD /* BilliardsDemoTests.swift */; };
 		3CAE19C122E5A40E00D80736 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CAE19C022E5A40E00D80736 /* AppDelegate.swift */; };
 		3CAE19C322E5A40E00D80736 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CAE19C222E5A40E00D80736 /* ViewController.swift */; };
 		3CAE19C622E5A40E00D80736 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CAE19C422E5A40E00D80736 /* Main.storyboard */; };
@@ -17,7 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3CAE19DD22E5B60800D80736 /* PBXContainerItemProxy */ = {
+		3C6FD95422E8335200DA3CAD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3CAE19B522E5A40E00D80736 /* Project object */;
 			proxyType = 1;
@@ -28,6 +29,9 @@
 
 /* Begin PBXFileReference section */
 		3C018ECE22E70BE2006E22DA /* BilliardsPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BilliardsPath.swift; sourceTree = "<group>"; };
+		3C6FD94F22E8335200DA3CAD /* BilliardsDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BilliardsDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C6FD95122E8335200DA3CAD /* BilliardsDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BilliardsDemoTests.swift; sourceTree = "<group>"; };
+		3C6FD95322E8335200DA3CAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CAE19BD22E5A40E00D80736 /* BilliardsDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BilliardsDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CAE19C022E5A40E00D80736 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3CAE19C222E5A40E00D80736 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -36,18 +40,17 @@
 		3CAE19CA22E5A41000D80736 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3CAE19CC22E5A41000D80736 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CAE19D222E5A9A100D80736 /* BilliardsTimeFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BilliardsTimeFunc.swift; sourceTree = "<group>"; };
-		3CAE19D822E5B60800D80736 /* BilliardsDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BilliardsDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3CAE19BA22E5A40E00D80736 /* Frameworks */ = {
+		3C6FD94C22E8335200DA3CAD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3CAE19D522E5B60800D80736 /* Frameworks */ = {
+		3CAE19BA22E5A40E00D80736 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -57,10 +60,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C6FD95022E8335200DA3CAD /* BilliardsDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				3C6FD95122E8335200DA3CAD /* BilliardsDemoTests.swift */,
+				3C6FD95322E8335200DA3CAD /* Info.plist */,
+			);
+			path = BilliardsDemoTests;
+			sourceTree = "<group>";
+		};
 		3CAE19B422E5A40E00D80736 = {
 			isa = PBXGroup;
 			children = (
 				3CAE19BF22E5A40E00D80736 /* BilliardsDemo */,
+				3C6FD95022E8335200DA3CAD /* BilliardsDemoTests */,
 				3CAE19BE22E5A40E00D80736 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,7 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				3CAE19BD22E5A40E00D80736 /* BilliardsDemo.app */,
-				3CAE19D822E5B60800D80736 /* BilliardsDemoTests.xctest */,
+				3C6FD94F22E8335200DA3CAD /* BilliardsDemoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -92,6 +105,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		3C6FD94E22E8335200DA3CAD /* BilliardsDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C6FD95622E8335200DA3CAD /* Build configuration list for PBXNativeTarget "BilliardsDemoTests" */;
+			buildPhases = (
+				3C6FD94B22E8335200DA3CAD /* Sources */,
+				3C6FD94C22E8335200DA3CAD /* Frameworks */,
+				3C6FD94D22E8335200DA3CAD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3C6FD95522E8335200DA3CAD /* PBXTargetDependency */,
+			);
+			name = BilliardsDemoTests;
+			productName = BilliardsDemoTests;
+			productReference = 3C6FD94F22E8335200DA3CAD /* BilliardsDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		3CAE19BC22E5A40E00D80736 /* BilliardsDemo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3CAE19CF22E5A41000D80736 /* Build configuration list for PBXNativeTarget "BilliardsDemo" */;
@@ -109,24 +140,6 @@
 			productReference = 3CAE19BD22E5A40E00D80736 /* BilliardsDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		3CAE19D722E5B60800D80736 /* BilliardsDemoTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3CAE19DF22E5B60800D80736 /* Build configuration list for PBXNativeTarget "BilliardsDemoTests" */;
-			buildPhases = (
-				3CAE19D422E5B60800D80736 /* Sources */,
-				3CAE19D522E5B60800D80736 /* Frameworks */,
-				3CAE19D622E5B60800D80736 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				3CAE19DE22E5B60800D80736 /* PBXTargetDependency */,
-			);
-			name = BilliardsDemoTests;
-			productName = BilliardsDemoTests;
-			productReference = 3CAE19D822E5B60800D80736 /* BilliardsDemoTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -137,12 +150,12 @@
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = nullLuli;
 				TargetAttributes = {
-					3CAE19BC22E5A40E00D80736 = {
-						CreatedOnToolsVersion = 10.1;
-					};
-					3CAE19D722E5B60800D80736 = {
+					3C6FD94E22E8335200DA3CAD = {
 						CreatedOnToolsVersion = 10.1;
 						TestTargetID = 3CAE19BC22E5A40E00D80736;
+					};
+					3CAE19BC22E5A40E00D80736 = {
+						CreatedOnToolsVersion = 10.1;
 					};
 				};
 			};
@@ -160,12 +173,19 @@
 			projectRoot = "";
 			targets = (
 				3CAE19BC22E5A40E00D80736 /* BilliardsDemo */,
-				3CAE19D722E5B60800D80736 /* BilliardsDemoTests */,
+				3C6FD94E22E8335200DA3CAD /* BilliardsDemoTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3C6FD94D22E8335200DA3CAD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3CAE19BB22E5A40E00D80736 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -176,16 +196,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3CAE19D622E5B60800D80736 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3C6FD94B22E8335200DA3CAD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C6FD95222E8335200DA3CAD /* BilliardsDemoTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3CAE19B922E5A40E00D80736 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -197,20 +218,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3CAE19D422E5B60800D80736 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		3CAE19DE22E5B60800D80736 /* PBXTargetDependency */ = {
+		3C6FD95522E8335200DA3CAD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3CAE19BC22E5A40E00D80736 /* BilliardsDemo */;
-			targetProxy = 3CAE19DD22E5B60800D80736 /* PBXContainerItemProxy */;
+			targetProxy = 3C6FD95422E8335200DA3CAD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -234,6 +248,46 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		3C6FD95722E8335200DA3CAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = W567PZ7SQ2;
+				INFOPLIST_FILE = BilliardsDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "www.jianshu.com-u-d471dca73ae9.BilliardsDemoTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BilliardsDemo.app/BilliardsDemo";
+			};
+			name = Debug;
+		};
+		3C6FD95822E8335200DA3CAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = W567PZ7SQ2;
+				INFOPLIST_FILE = BilliardsDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "www.jianshu.com-u-d471dca73ae9.BilliardsDemoTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BilliardsDemo.app/BilliardsDemo";
+			};
+			name = Release;
+		};
 		3CAE19CD22E5A41000D80736 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -386,49 +440,18 @@
 			};
 			name = Release;
 		};
-		3CAE19E022E5B60800D80736 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = W567PZ7SQ2;
-				INFOPLIST_FILE = BilliardsDemoTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "www.jianshu.com-u-d471dca73ae9.BilliardsDemoTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BilliardsDemo.app/BilliardsDemo";
-			};
-			name = Debug;
-		};
-		3CAE19E122E5B60800D80736 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = W567PZ7SQ2;
-				INFOPLIST_FILE = BilliardsDemoTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "www.jianshu.com-u-d471dca73ae9.BilliardsDemoTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BilliardsDemo.app/BilliardsDemo";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3C6FD95622E8335200DA3CAD /* Build configuration list for PBXNativeTarget "BilliardsDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C6FD95722E8335200DA3CAD /* Debug */,
+				3C6FD95822E8335200DA3CAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		3CAE19B822E5A40E00D80736 /* Build configuration list for PBXProject "BilliardsDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -443,15 +466,6 @@
 			buildConfigurations = (
 				3CAE19D022E5A41000D80736 /* Debug */,
 				3CAE19D122E5A41000D80736 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3CAE19DF22E5B60800D80736 /* Build configuration list for PBXNativeTarget "BilliardsDemoTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3CAE19E022E5B60800D80736 /* Debug */,
-				3CAE19E122E5B60800D80736 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

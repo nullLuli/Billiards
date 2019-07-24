@@ -9,9 +9,18 @@
 import Foundation
 import UIKit
 
-class BilliardsTimeFunc {
+public class BilliardsTimeFunc {
     //根据初始速度和加速度，拟合出时间和进度的贝塞尔曲线
-    class func transMotionToTimeBezier(v0: CGFloat, a: CGFloat) -> CAMediaTimingFunction {
+    public class func timeFuncFromMotion(v0: CGFloat, a: CGFloat) -> CAMediaTimingFunction {
+        guard let (controlPInST, endP) = BilliardsTimeFunc.bezierPointsFromMotionParabola(v0: v0, a: a) else {
+            return CAMediaTimingFunction(name: .linear)
+        }
+        let controlPInPT = CGPoint(x: controlPInST.x / endP.x, y: controlPInST.y / endP.y)
+        return CAMediaTimingFunction(controlPoints: 0, 0, Float(controlPInPT.x), Float(controlPInPT.y))
+    }
+    
+    //从s和t的抛物线函数中提取贝塞尔函数
+    public class func bezierPointsFromMotionParabola(v0: CGFloat, a: CGFloat) -> (control: CGPoint, end: CGPoint)? {
         //距离和时间函数 v0*t - 1/2 * a * t^2 = s
         //起始点 s = 0, t = 0
         //终点
@@ -19,20 +28,20 @@ class BilliardsTimeFunc {
         let sMax = (v0 * v0) / (2 * a) //距离最大值
         //任意时间点的切线斜率 s' = v = v0 - at
         //起始点的切线方程
-        let aBegin: CGFloat = v0
-        let bBegin: CGFloat = 0 //beginP.x * v0 + b = beginP.y
-        let beginTangentLine = Line(slope: aBegin, intersectionWithY: bBegin)
+        let tangentSlopeBegin: CGFloat = v0
+        let tangentIntersectionBegin: CGFloat = 0 //beginP.x * v0 + b = beginP.y
+        let beginTangentLine = Line(slope: tangentSlopeBegin, intersectionWithY: tangentIntersectionBegin)
         //终点的切线方程
         //斜率 vEnd = v0 - a * tMax = 0
-        let aEnd: CGFloat = 0
-        let bEnd: CGFloat = sMax
-        let endTangentLine = Line(slope: aEnd, intersectionWithY: bEnd)
+        let tangentAEnd: CGFloat = 0
+        let tangentBEnd: CGFloat = 1
+        let tangentCEnd: CGFloat = -sMax
+        let endTangentLine = Line(a: tangentAEnd, b: tangentBEnd, c: tangentCEnd)
         //切线的交点，根据贝塞尔定义，也就是贝塞尔的控制点
         guard let controlPInST = beginTangentLine.intersection(line: endTangentLine) else {
-            return CAMediaTimingFunction(name: .linear)
+            return nil
         }
-        let controlPInPT = CGPoint(x: controlPInST.x / tMax, y: controlPInST.y / sMax)
-        return CAMediaTimingFunction(controlPoints: 0, 0, Float(controlPInPT.x), Float(controlPInPT.y))
+        return (controlPInST, CGPoint(x: tMax, y: sMax))
     }
 }
 

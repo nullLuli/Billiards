@@ -11,8 +11,14 @@ import UIKit
 
 class BilliardsPath {
     //vertor方向，总共可以滚动distance距离，遇到bounds会转向
-    class func path(distance: CGFloat, vertor: CGVector, beginPoint: CGPoint, bounds: CGRect) -> UIBezierPath {
-        let rectLineType = vertorIntersectionRect(beginP: beginPoint, vertor: vertor, rect: bounds)
+    class func path(distance: CGFloat, vector: CGVector, beginPoint: CGPoint, bounds: CGRect) -> UIBezierPath {
+        let path = UIBezierPath()
+        BilliardsPath._path(distance: distance, vector: vector, beginPoint: beginPoint, bounds: bounds, path: path)
+        return path
+    }
+    
+    class func _path(distance: CGFloat, vector: CGVector, beginPoint: CGPoint, bounds: CGRect, path: UIBezierPath) {
+        let rectLineType = vertorIntersectionRect(beginP: beginPoint, vertor: vector, rect: bounds)
         
         var rectLine: Line
         switch rectLineType {
@@ -26,9 +32,30 @@ class BilliardsPath {
             rectLine = bounds.rightLine()
         }
         
-        let motionLine = Line(a: <#T##CGFloat#>, b: <#T##CGFloat#>, c: <#T##CGFloat#>)
+        let motionLine = Line(a: vector.dy, b: -vector.dx, c: vector.dx * beginPoint.y - vector.dy * beginPoint.x)
         
-        let intersectionPoint = rectLine.intersection(line: <#T##Line#>)
+        guard let intersectionPoint = rectLine.intersection(line: motionLine) else {
+            assertionFailure()
+            return
+        }
+        
+        // 计算beginPoint到intersectionPoint的距离
+        let consumDistance = sqrt(pow(intersectionPoint.y - beginPoint.y, 2) + pow(intersectionPoint.x - beginPoint.x, 2))
+        if consumDistance >= distance {
+            let endPoint = CGPoint(x: intersectionPoint.x * (consumDistance / distance), y: intersectionPoint.y * (consumDistance / distance))
+            if path.isEmpty {
+                path.move(to: beginPoint)
+            }
+            path.addLine(to: endPoint)
+        } else {
+            if path.isEmpty {
+                path.move(to: beginPoint)
+            }
+            path.addLine(to: intersectionPoint)
+            
+            let remainDistance = distance - consumDistance
+            BilliardsPath._path(distance: remainDistance, vector: vector.reflexVector(line: rectLine), beginPoint: intersectionPoint, bounds: bounds, path: path)
+        }
     }
     
     class func vertorIntersectionRect(beginP: CGPoint, vertor: CGVector, rect: CGRect) -> LineType {
@@ -107,6 +134,27 @@ class BilliardsPath {
             //x
             return Side.x
         }
+    }
+}
+
+extension CGVector {
+    func reflexVector(line: Line) -> CGVector {
+        if line.a == 0 {
+            assert(line.b != 0)
+            return CGVector(dx: dx, dy: (dy - line.c / line.b) / 2)
+        }
+        let beginP = CGPoint(x: -line.c / line.a, y: 0) //以line和x轴的交点当作向量的起点，求对称点
+        let vertorEndP = CGPoint(x: dx + beginP.x, y: dy + beginP.y)
+        let c = -line.b * vertorEndP.x - line.a * vertorEndP.y
+        let verticalLine = Line(a: line.b, b: line.a, c: c)
+        //向量垂直于line的点
+        guard let intersectionP = line.intersection(line: verticalLine) else {
+            assertionFailure()
+            return CGVector(dx: 0, dy: 0)
+        }
+        let reflexP = CGPoint(x: 2 * intersectionP.x - vertorEndP.x, y: 2 * intersectionP.y - vertorEndP.y)
+        let reflexVector = CGVector(dx: reflexP.x - beginP.x, dy: reflexP.y - beginP.y)
+        return reflexVector
     }
 }
 
