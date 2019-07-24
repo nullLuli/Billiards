@@ -9,16 +9,16 @@
 import Foundation
 import UIKit
 
-class BilliardsPath {
+public class BilliardsPath {
     //vertor方向，总共可以滚动distance距离，遇到bounds会转向
-    class func path(distance: CGFloat, vector: CGVector, beginPoint: CGPoint, bounds: CGRect) -> UIBezierPath {
+    public class func path(distance: CGFloat, vector: CGVector, beginPoint: CGPoint, bounds: CGRect) -> UIBezierPath {
         let path = UIBezierPath()
         BilliardsPath._path(distance: distance, vector: vector, beginPoint: beginPoint, bounds: bounds, path: path)
         return path
     }
     
-    class func _path(distance: CGFloat, vector: CGVector, beginPoint: CGPoint, bounds: CGRect, path: UIBezierPath) {
-        let rectLineType = vertorIntersectionRect(beginP: beginPoint, vertor: vector, rect: bounds)
+    public class func _path(distance: CGFloat, vector: CGVector, beginPoint: CGPoint, bounds: CGRect, path: UIBezierPath) {
+        let rectLineType = whichRectLineVectorInsection(beginP: beginPoint, vertor: vector, rect: bounds)
         
         var rectLine: Line
         switch rectLineType {
@@ -58,7 +58,7 @@ class BilliardsPath {
         }
     }
     
-    class func vertorIntersectionRect(beginP: CGPoint, vertor: CGVector, rect: CGRect) -> LineType {
+    public class func whichRectLineVectorInsection(beginP: CGPoint, vertor: CGVector, rect: CGRect) -> LineType {
         if vertor.dx > 0, vertor.dy > 0 {
             //right | bottom
             let side = whichSide(vertor: vertor, beginP: beginP, endP: CGPoint(x: rect.maxX, y: rect.maxY))
@@ -115,19 +115,21 @@ class BilliardsPath {
         }
     }
     
-    enum Side {
+    public enum Side {
         case x
         case y
     }
     
-    class func whichSide(vertor: CGVector, beginP: CGPoint, endP: CGPoint) -> Side {
+    public class func whichSide(vertor: CGVector, beginP: CGPoint, endP: CGPoint) -> Side {
         if endP.y - beginP.y == 0 || endP.x - beginP.x == 0 {
             assertionFailure()
             return Side.x
         }
-        let limitSlop = (endP.y - beginP.y) / (endP.x - beginP.x)
-        let slop = vertor.dy / vertor.dx
-        if abs(limitSlop) > abs(slop) {
+        if vertor.dx == 0 {
+            return Side.y
+        }
+        let unitY = (endP.y - beginP.y) * (vertor.dx / (endP.x - beginP.x))
+        if abs(vertor.dy) > abs(unitY) {
             //y
             return Side.y
         } else {
@@ -137,16 +139,16 @@ class BilliardsPath {
     }
 }
 
-extension CGVector {
-    func reflexVector(line: Line) -> CGVector {
+public extension CGVector {
+    public func reflexVector(line: Line) -> CGVector {
         if line.a == 0 {
             assert(line.b != 0)
-            return CGVector(dx: dx, dy: (dy - line.c / line.b) / 2)
+            return CGVector(dx: dx, dy: -dy)
         }
         let beginP = CGPoint(x: -line.c / line.a, y: 0) //以line和x轴的交点当作向量的起点，求对称点
         let vertorEndP = CGPoint(x: dx + beginP.x, y: dy + beginP.y)
-        let c = -line.b * vertorEndP.x - line.a * vertorEndP.y
-        let verticalLine = Line(a: line.b, b: line.a, c: c)
+        let c = -line.b * vertorEndP.x + line.a * vertorEndP.y
+        let verticalLine = Line(a: line.b, b: -line.a, c: c)
         //向量垂直于line的点
         guard let intersectionP = line.intersection(line: verticalLine) else {
             assertionFailure()
@@ -158,25 +160,25 @@ extension CGVector {
     }
 }
 
-extension CGRect {
-    func topLine() -> Line {
+public extension CGRect {
+    public func topLine() -> Line {
         return Line(a: 0, b: 1, c: -minY)
     }
     
-    func bottomLine() -> Line {
+    public func bottomLine() -> Line {
         return Line(a: 0, b: 1, c: -maxY)
     }
     
-    func leftLine() -> Line {
+    public func leftLine() -> Line {
         return Line(a: 1, b: 0, c: -minX)
     }
     
-    func rightLine() -> Line {
+    public func rightLine() -> Line {
         return Line(a: 1, b: 0, c: -maxX)
     }
 }
 
-enum LineType {
+public enum LineType {
     case top
     case bottom
     case left

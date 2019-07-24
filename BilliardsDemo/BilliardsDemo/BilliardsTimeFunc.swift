@@ -45,26 +45,26 @@ public class BilliardsTimeFunc {
     }
 }
 
-struct Line {
+public struct Line {
     // a*x + b*y + c = 0
     var a: CGFloat = 0
     var b: CGFloat = 0
     var c: CGFloat = 0
     
-    init(slope: CGFloat, intersectionWithY: CGFloat) {
+    public init(slope: CGFloat, intersectionWithY: CGFloat) {
         // y = slope * x + intersectionWithY
         a = slope
         b = -1
         c = intersectionWithY
     }
     
-    init(a: CGFloat, b: CGFloat, c: CGFloat) {
+    public init(a: CGFloat, b: CGFloat, c: CGFloat) {
         self.a = a
         self.b = b
         self.c = c
     }
     
-    func intersection(line: Line) -> CGPoint? {
+    public func intersection(line: Line) -> CGPoint? {
         guard a * line.b != line.a * b else {
             return nil
         }

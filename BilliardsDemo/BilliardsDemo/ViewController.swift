@@ -38,12 +38,12 @@ class ViewController: UIViewController {
         let path = BilliardsPath.path(distance: sMax, vector: vector, beginPoint: colorView.layer.position, bounds: view.bounds)
         let timeFunc = BilliardsTimeFunc.timeFuncFromMotion(v0: v0, a: a)
         
-        let animate = CAKeyframeAnimation(keyPath: "postion")
+        let animate = CAKeyframeAnimation(keyPath: "position")
         animate.path = path.cgPath
         animate.timingFunctions = [timeFunc]
         animate.duration = CFTimeInterval(tMax)
         animate.isRemovedOnCompletion = true
-        colorView.layer.add(animate, forKey: nil)
+        colorView.layer.add(animate, forKey: "position")
     }
 }
 
