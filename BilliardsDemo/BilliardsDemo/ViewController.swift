@@ -30,20 +30,30 @@ class ViewController: UIViewController {
     }
     
     @objc func beginAnimate() {
-        let v0: CGFloat = 200
-        let a: CGFloat = 10
-        let vector = CGVector(dx: 1, dy: 1)
-        let sMax = (v0 * v0) / (2 * a)
-        let tMax = v0 / a
-        let path = BilliardsPath.path(distance: sMax, vector: vector, beginPoint: colorView.layer.position, bounds: view.bounds)
-        let timeFunc = BilliardsTimeFunc.timeFuncFromMotion(v0: v0, a: a)
+        let a: CGFloat = 200
+        let vector = CGVector(dx: 1000, dy: 1000)
+        let tMax = vector.speed / a
+//        let path = BilliardsPath.path(distance: sMax, vector: vector, beginPoint: colorView.layer.position, bounds: view.bounds)
+//        let timeFunc = BilliardsTimeFunc.timeFuncFromMotion(v0: v0, a: a)
+        let (durtimes, timeFuncs, path) = BilliardsPath.segmenteAniamtion(velocity: vector, a: a, beginPoint: colorView.layer.position, bounds: view.bounds)
+        
+        let sumTime = durtimes.reduce(0) { (result, item) -> CGFloat in
+            return result + item
+        }
+        
+        let keyTimes = durtimes.map { (item) -> NSNumber in
+            return NSNumber(floatLiteral: Double(item/sumTime))
+        }
         
         let animate = CAKeyframeAnimation(keyPath: "position")
         animate.path = path.cgPath
-        animate.timingFunctions = [timeFunc]
+        animate.keyTimes = keyTimes
+        animate.timingFunctions = timeFuncs
         animate.duration = CFTimeInterval(tMax)
         animate.isRemovedOnCompletion = true
         colorView.layer.add(animate, forKey: "position")
     }
+    
+    
 }
 

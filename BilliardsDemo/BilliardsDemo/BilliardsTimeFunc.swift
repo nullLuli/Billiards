@@ -10,6 +10,39 @@ import Foundation
 import UIKit
 
 public class BilliardsTimeFunc {
+    
+    //根据初始速度、末速度、加速度来确定时间函数
+    public class func timeFuncFromSegmentMotion(v0: CGFloat, a: CGFloat, vEnd: CGFloat) -> CAMediaTimingFunction {
+        guard let (controlPInST, endP) = BilliardsTimeFunc.bezierPointsFromSegmentMotion(v0: v0, a: a, vEnd: vEnd) else {
+            return CAMediaTimingFunction(name: .linear)
+        }
+        let controlPInPT = CGPoint(x: controlPInST.x / endP.x, y: controlPInST.y / endP.y)
+        return CAMediaTimingFunction(controlPoints: 0, 0, Float(controlPInPT.x), Float(controlPInPT.y))
+    }
+    
+    public class func bezierPointsFromSegmentMotion(v0: CGFloat, a: CGFloat, vEnd: CGFloat) -> (control: CGPoint, end: CGPoint)? {
+        //距离和时间函数 v0*t - 1/2 * a * t^2 = s
+        //起始点 s = 0, t = 0
+        //终点
+        let durtime = (v0 - vEnd) / a //速度降到vEnd所需时间
+        let distance = v0 * durtime - 1/2 * a * pow(durtime, 2) //总共的距离
+        //任意时间点的切线斜率 s' = v = v0 - at
+        //起始点的切线方程
+        let tangentSlopeBegin: CGFloat = v0
+        let tangentIntersectionBegin: CGFloat = 0 //beginP.x * v0 + b = beginP.y
+        let beginTangentLine = Line(slope: tangentSlopeBegin, intersectionWithY: tangentIntersectionBegin)
+        //终点的切线方程
+        let tangentAEnd: CGFloat = vEnd
+        let tangentBEnd: CGFloat = -1
+        let tangentCEnd: CGFloat = distance - vEnd * durtime
+        let endTangentLine = Line(a: tangentAEnd, b: tangentBEnd, c: tangentCEnd)
+        //切线的交点，根据贝塞尔定义，也就是贝塞尔的控制点
+        guard let controlPInST = beginTangentLine.intersection(line: endTangentLine) else {
+            return nil
+        }
+        return (controlPInST, CGPoint(x: durtime, y: distance))
+    }
+    
     //根据初始速度和加速度，拟合出时间和进度的贝塞尔曲线
     public class func timeFuncFromMotion(v0: CGFloat, a: CGFloat) -> CAMediaTimingFunction {
         guard let (controlPInST, endP) = BilliardsTimeFunc.bezierPointsFromMotionParabola(v0: v0, a: a) else {

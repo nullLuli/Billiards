@@ -10,7 +10,67 @@ import Foundation
 import UIKit
 
 public class BilliardsPath {
-    //vertor方向，总共可以滚动distance距离，遇到bounds会转向
+    public class func segmenteAniamtion(velocity: CGVector, a: CGFloat, beginPoint: CGPoint, bounds: CGRect, path: UIBezierPath = UIBezierPath()) -> ([CGFloat], [CAMediaTimingFunction], UIBezierPath) {
+        let rectLineType = whichRectLineVectorInsection(beginP: beginPoint, vector: velocity, rect: bounds)
+        
+        var rectLine: Line
+        switch rectLineType {
+        case .top:
+            rectLine = bounds.topLine()
+        case .bottom:
+            rectLine = bounds.bottomLine()
+        case .left:
+            rectLine = bounds.leftLine()
+        case .right:
+            rectLine = bounds.rightLine()
+        }
+        
+        let motionLine = Line(a: velocity.dy, b: -velocity.dx, c: velocity.dx * beginPoint.y - velocity.dy * beginPoint.x)
+        
+        guard let intersectPoint = rectLine.intersection(line: motionLine) else {
+            assertionFailure()
+            return ([], [], UIBezierPath())
+        }
+        
+        var timeFuncs: [CAMediaTimingFunction] = []
+        var durtimes: [CGFloat] = []
+        
+        let speed = velocity.speed
+        let maxDistance = (pow(velocity.dx, 2) + pow(velocity.dy, 2)) / 2 * a
+        let consumDistance = sqrt(pow(intersectPoint.y - beginPoint.y, 2) + pow(intersectPoint.x - beginPoint.x, 2))
+        let durtime: CGFloat = (sqrt(pow(velocity.dx, 2) + pow(velocity.dy, 2) - 2 * a * consumDistance) - speed) / a //利用抛物线的根公式求当前时间
+        
+        if consumDistance >= maxDistance {
+            let endPoint = CGPoint(x: intersectPoint.x * (maxDistance / consumDistance), y: intersectPoint.y * (maxDistance / consumDistance))
+            if path.isEmpty {
+                path.move(to: beginPoint)
+            }
+            path.addLine(to: endPoint)
+            
+            let timeFunc = BilliardsTimeFunc.timeFuncFromSegmentMotion(v0: speed, a: a, vEnd: 0)
+            timeFuncs.append(timeFunc)
+            durtimes.append(durtime)
+
+        } else {
+            if path.isEmpty {
+                path.move(to: beginPoint)
+            }
+            path.addLine(to: intersectPoint)
+            
+            let remainSpeed = speed - a * durtime
+            let remainVelocity = CGVector(dx: velocity.dx * remainSpeed / speed, dy: velocity.dy * remainSpeed / speed)
+            let timeFunc = BilliardsTimeFunc.timeFuncFromSegmentMotion(v0: speed, a: a, vEnd: remainSpeed)
+            timeFuncs.append(timeFunc)
+            durtimes.append(durtime)
+            let (laterDurtimes, laterTimeFuncs, _) = BilliardsPath.segmenteAniamtion(velocity: remainVelocity, a: a, beginPoint: intersectPoint, bounds: bounds, path: path)
+            timeFuncs.append(contentsOf: laterTimeFuncs)
+            durtimes.append(contentsOf: laterDurtimes)
+        }
+        
+        return (durtimes, timeFuncs, path)
+    }
+    
+    //vector方向，总共可以滚动distance距离，遇到bounds会转向
     public class func path(distance: CGFloat, vector: CGVector, beginPoint: CGPoint, bounds: CGRect) -> UIBezierPath {
         let path = UIBezierPath()
         BilliardsPath._path(distance: distance, vector: vector, beginPoint: beginPoint, bounds: bounds, path: path)
@@ -18,7 +78,7 @@ public class BilliardsPath {
     }
     
     public class func _path(distance: CGFloat, vector: CGVector, beginPoint: CGPoint, bounds: CGRect, path: UIBezierPath) {
-        let rectLineType = whichRectLineVectorInsection(beginP: beginPoint, vertor: vector, rect: bounds)
+        let rectLineType = whichRectLineVectorInsection(beginP: beginPoint, vector: vector, rect: bounds)
         
         var rectLine: Line
         switch rectLineType {
@@ -42,7 +102,7 @@ public class BilliardsPath {
         // 计算beginPoint到intersectionPoint的距离
         let consumDistance = sqrt(pow(intersectionPoint.y - beginPoint.y, 2) + pow(intersectionPoint.x - beginPoint.x, 2))
         if consumDistance >= distance {
-            let endPoint = CGPoint(x: intersectionPoint.x * (consumDistance / distance), y: intersectionPoint.y * (consumDistance / distance))
+            let endPoint = CGPoint(x: intersectionPoint.x * (distance / consumDistance), y: intersectionPoint.y * (distance / consumDistance))
             if path.isEmpty {
                 path.move(to: beginPoint)
             }
@@ -58,53 +118,53 @@ public class BilliardsPath {
         }
     }
     
-    public class func whichRectLineVectorInsection(beginP: CGPoint, vertor: CGVector, rect: CGRect) -> LineType {
-        if vertor.dx > 0, vertor.dy > 0 {
+    public class func whichRectLineVectorInsection(beginP: CGPoint, vector: CGVector, rect: CGRect) -> LineType {
+        if vector.dx > 0, vector.dy > 0 {
             //right | bottom
-            let side = whichSide(vertor: vertor, beginP: beginP, endP: CGPoint(x: rect.maxX, y: rect.maxY))
+            let side = whichSide(vector: vector, beginP: beginP, endP: CGPoint(x: rect.maxX, y: rect.maxY))
             switch side {
             case .y:
                 return LineType.bottom
             case .x:
                 return LineType.right
             }
-        } else if vertor.dx > 0, vertor.dy < 0 {
+        } else if vector.dx > 0, vector.dy < 0 {
             //top | right
-            let side = whichSide(vertor: vertor, beginP: beginP, endP: CGPoint(x: rect.maxX, y: rect.minY))
+            let side = whichSide(vector: vector, beginP: beginP, endP: CGPoint(x: rect.maxX, y: rect.minY))
             switch side {
             case .y:
                 return LineType.top
             case .x:
                 return LineType.right
             }
-        } else if vertor.dx < 0, vertor.dy > 0 {
+        } else if vector.dx < 0, vector.dy > 0 {
             //left | bottom
-            let side = whichSide(vertor: vertor, beginP: beginP, endP: CGPoint(x: rect.minX, y: rect.maxY))
+            let side = whichSide(vector: vector, beginP: beginP, endP: CGPoint(x: rect.minX, y: rect.maxY))
             switch side {
             case .y:
                 return LineType.bottom
             case .x:
                 return LineType.left
             }
-        } else if vertor.dx < 0, vertor.dy < 0 {
+        } else if vector.dx < 0, vector.dy < 0 {
             //left | top
-            let side = whichSide(vertor: vertor, beginP: beginP, endP: CGPoint(x: rect.minX, y: rect.minY))
+            let side = whichSide(vector: vector, beginP: beginP, endP: CGPoint(x: rect.minX, y: rect.minY))
             switch side {
             case .y:
                 return LineType.top
             case .x:
                 return LineType.left
             }
-        } else if vertor.dx == 0, vertor.dy != 0 {
+        } else if vector.dx == 0, vector.dy != 0 {
             //top | bottom
-            if vertor.dy > 0 {
+            if vector.dy > 0 {
                 return LineType.bottom
             } else {
                 return LineType.top
             }
-        } else if vertor.dy == 0, vertor.dx != 0 {
+        } else if vector.dy == 0, vector.dx != 0 {
             //left | right
-            if vertor.dx > 0 {
+            if vector.dx > 0 {
                 return LineType.right
             } else {
                 return LineType.left
@@ -120,16 +180,16 @@ public class BilliardsPath {
         case y
     }
     
-    public class func whichSide(vertor: CGVector, beginP: CGPoint, endP: CGPoint) -> Side {
+    public class func whichSide(vector: CGVector, beginP: CGPoint, endP: CGPoint) -> Side {
         if endP.y - beginP.y == 0 || endP.x - beginP.x == 0 {
             assertionFailure()
             return Side.x
         }
-        if vertor.dx == 0 {
+        if vector.dx == 0 {
             return Side.y
         }
-        let unitY = (endP.y - beginP.y) * (vertor.dx / (endP.x - beginP.x))
-        if abs(vertor.dy) > abs(unitY) {
+        let unitY = (endP.y - beginP.y) * (vector.dx / (endP.x - beginP.x))
+        if abs(vector.dy) > abs(unitY) {
             //y
             return Side.y
         } else {
@@ -146,17 +206,21 @@ public extension CGVector {
             return CGVector(dx: dx, dy: -dy)
         }
         let beginP = CGPoint(x: -line.c / line.a, y: 0) //以line和x轴的交点当作向量的起点，求对称点
-        let vertorEndP = CGPoint(x: dx + beginP.x, y: dy + beginP.y)
-        let c = -line.b * vertorEndP.x + line.a * vertorEndP.y
+        let vectorEndP = CGPoint(x: dx + beginP.x, y: dy + beginP.y)
+        let c = -line.b * vectorEndP.x + line.a * vectorEndP.y
         let verticalLine = Line(a: line.b, b: -line.a, c: c)
         //向量垂直于line的点
         guard let intersectionP = line.intersection(line: verticalLine) else {
             assertionFailure()
             return CGVector(dx: 0, dy: 0)
         }
-        let reflexP = CGPoint(x: 2 * intersectionP.x - vertorEndP.x, y: 2 * intersectionP.y - vertorEndP.y)
+        let reflexP = CGPoint(x: 2 * intersectionP.x - vectorEndP.x, y: 2 * intersectionP.y - vectorEndP.y)
         let reflexVector = CGVector(dx: reflexP.x - beginP.x, dy: reflexP.y - beginP.y)
         return reflexVector
+    }
+    
+    public var speed: CGFloat {
+        return sqrt(pow(dx, 2) + pow(dy, 2))
     }
 }
 
