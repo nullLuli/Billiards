@@ -41,7 +41,18 @@ class ViewController: UIViewController {
             return result + item
         }
         
-        let keyTimes = durtimes.map { (item) -> NSNumber in
+        let accumTimes = durtimes.reduce([CGFloat]()) { (result, item) -> [CGFloat] in
+            var resultV = result
+            if result.count > 0 {
+                let last = result[result.count - 1]
+                resultV.append(last + item)
+            } else {
+                resultV.append(item)
+            }
+            return resultV
+        }
+        
+        let keyTimes = accumTimes.map { (item) -> NSNumber in
             return NSNumber(floatLiteral: Double(item/sumTime))
         }
         

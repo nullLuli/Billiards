@@ -36,9 +36,8 @@ public class BilliardsPath {
         var durtimes: [CGFloat] = []
         
         let speed = velocity.speed
-        let maxDistance = (pow(velocity.dx, 2) + pow(velocity.dy, 2)) / 2 * a
+        let maxDistance = (pow(velocity.dx, 2) + pow(velocity.dy, 2)) / (2 * a)
         let consumDistance = sqrt(pow(intersectPoint.y - beginPoint.y, 2) + pow(intersectPoint.x - beginPoint.x, 2))
-        let durtime: CGFloat = (sqrt(pow(velocity.dx, 2) + pow(velocity.dy, 2) - 2 * a * consumDistance) - speed) / a //利用抛物线的根公式求当前时间
         
         if consumDistance >= maxDistance {
             let endPoint = CGPoint(x: intersectPoint.x * (maxDistance / consumDistance), y: intersectPoint.y * (maxDistance / consumDistance))
@@ -49,7 +48,9 @@ public class BilliardsPath {
             
             let timeFunc = BilliardsTimeFunc.timeFuncFromSegmentMotion(v0: speed, a: a, vEnd: 0)
             timeFuncs.append(timeFunc)
+            let durtime: CGFloat = (speed - sqrt(pow(velocity.dx, 2) + pow(velocity.dy, 2) - 2 * a * maxDistance)) / a //利用抛物线的根公式求当前时间
             durtimes.append(durtime)
+            assert(!durtime.isNaN)
 
         } else {
             if path.isEmpty {
@@ -57,8 +58,11 @@ public class BilliardsPath {
             }
             path.addLine(to: intersectPoint)
             
+            let durtime: CGFloat = (speed - sqrt(pow(velocity.dx, 2) + pow(velocity.dy, 2) - 2 * a * consumDistance)) / a //利用抛物线的根公式求当前时间
+            assert(!durtime.isNaN)
             let remainSpeed = speed - a * durtime
-            let remainVelocity = CGVector(dx: velocity.dx * remainSpeed / speed, dy: velocity.dy * remainSpeed / speed)
+            var remainVelocity = CGVector(dx: velocity.dx * remainSpeed / speed, dy: velocity.dy * remainSpeed / speed)
+            remainVelocity = remainVelocity.reflexVector(line: rectLine)
             let timeFunc = BilliardsTimeFunc.timeFuncFromSegmentMotion(v0: speed, a: a, vEnd: remainSpeed)
             timeFuncs.append(timeFunc)
             durtimes.append(durtime)
