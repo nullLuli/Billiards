@@ -52,9 +52,10 @@ class ViewController: UIViewController {
             return resultV
         }
         
-        let keyTimes = accumTimes.map { (item) -> NSNumber in
+        var keyTimes = accumTimes.map { (item) -> NSNumber in
             return NSNumber(floatLiteral: Double(item/sumTime))
         }
+        keyTimes.insert(NSNumber(value: 0), at: 0)
         
         let animate = CAKeyframeAnimation(keyPath: "position")
         animate.path = path.cgPath

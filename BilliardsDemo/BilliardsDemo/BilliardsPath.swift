@@ -34,13 +34,14 @@ public class BilliardsPath {
         
         var timeFuncs: [CAMediaTimingFunction] = []
         var durtimes: [CGFloat] = []
+        var consumDistances: [CGFloat] = []
         
         let speed = velocity.speed
         let maxDistance = (pow(velocity.dx, 2) + pow(velocity.dy, 2)) / (2 * a)
         let consumDistance = sqrt(pow(intersectPoint.y - beginPoint.y, 2) + pow(intersectPoint.x - beginPoint.x, 2))
         
         if consumDistance >= maxDistance {
-            let endPoint = CGPoint(x: intersectPoint.x * (maxDistance / consumDistance), y: intersectPoint.y * (maxDistance / consumDistance))
+            let endPoint = CGPoint(x: beginPoint.x + (intersectPoint.x - beginPoint.x) * (maxDistance / consumDistance), y: beginPoint.y + (intersectPoint.y - beginPoint.y) * (maxDistance / consumDistance))
             if path.isEmpty {
                 path.move(to: beginPoint)
             }
